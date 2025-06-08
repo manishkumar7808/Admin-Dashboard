@@ -1,286 +1,314 @@
+// import React, { useState } from 'react';
+// import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+
+
+// const initialData = {
+//   tasks: {
+//     'task-1': {
+//       id: 'task-1',
+//       title: 'Design Homepage',
+//       description: 'Create the main homepage layout',
+//       deadline: '2025-06-10',
+//       assignedTo: 'Manish',
+//       priority: 'High',
+//       checklist: ['Header', 'Footer', 'Banner'],
+//       completed: [true, false, false]
+//     }
+//   },
+//   columns: {
+//     'todo': {
+//       id: 'todo',
+//       title: 'To Do',
+//       taskIds: ['task-1']
+//     },
+//     'inProgress': {
+//       id: 'inProgress',
+//       title: 'In Progress',
+//       taskIds: []
+//     },
+//     'done': {
+//       id: 'done',
+//       title: 'Done',
+//       taskIds: []
+//     }
+//   },
+//   columnOrder: ['todo', 'inProgress', 'done']
+// };
+
+// function KanbanBoard() {
+//   const [data, setData] = useState(initialData);
+
+//   const onDragEnd = (result) => {
+//     const { destination, source, draggableId } = result;
+//     if (!destination) return;
+
+//     const start = data.columns[source.droppableId];
+//     const finish = data.columns[destination.droppableId];
+
+//     if (start === finish) {
+//       const newTaskIds = Array.from(start.taskIds);
+//       newTaskIds.splice(source.index, 1);
+//       newTaskIds.splice(destination.index, 0, draggableId);
+
+//       const newColumn = {
+//         ...start,
+//         taskIds: newTaskIds
+//       };
+
+//       setData({
+//         ...data,
+//         columns: {
+//           ...data.columns,
+//           [newColumn.id]: newColumn
+//         }
+//       });
+//       return;
+//     }
+
+//     const startTaskIds = Array.from(start.taskIds);
+//     startTaskIds.splice(source.index, 1);
+//     const newStart = {
+//       ...start,
+//       taskIds: startTaskIds
+//     };
+
+//     const finishTaskIds = Array.from(finish.taskIds);
+//     finishTaskIds.splice(destination.index, 0, draggableId);
+//     const newFinish = {
+//       ...finish,
+//       taskIds: finishTaskIds
+//     };
+
+//     setData({
+//       ...data,
+//       columns: {
+//         ...data.columns,
+//         [newStart.id]: newStart,
+//         [newFinish.id]: newFinish
+//       }
+//     });
+//   };
+
+//   return (
+//     <div className="kanban-board">
+//       <DragDropContext onDragEnd={onDragEnd}>
+//         {data.columnOrder.map((columnId) => {
+//           const column = data.columns[columnId];
+//           const tasks = column.taskIds.map(taskId => data.tasks[taskId]);
+//           return (
+//             <Droppable droppableId={column.id} key={column.id}>
+//               {(provided) => (
+//                 <div className="kanban-column" {...provided.droppableProps} ref={provided.innerRef}>
+//                   <h2>{column.title}</h2>
+//                   {tasks.map((task, index) => (
+//                     <Draggable draggableId={task.id} index={index} key={task.id}>
+//                       {(provided) => (
+//                         <div
+//                           className={`kanban-task priority-${task.priority.toLowerCase()}`}
+//                           ref={provided.innerRef}
+//                           {...provided.draggableProps}
+//                           {...provided.dragHandleProps}
+//                         >
+//                           <h3>{task.title}</h3>
+//                           <p>{task.description}</p>
+//                           <p><strong>Assigned:</strong> {task.assignedTo}</p>
+//                           <p><strong>Deadline:</strong> {task.deadline}</p>
+//                           <p><strong>Priority:</strong> {task.priority}</p>
+//                           <ul>
+//                             {task.checklist.map((item, idx) => (
+//                               <li key={idx}>
+//                                 <input type="checkbox" checked={task.completed[idx]} readOnly /> {item}
+//                               </li>
+//                             ))}
+//                           </ul>
+//                         </div>
+//                       )}
+//                     </Draggable>
+//                   ))}
+//                   {provided.placeholder}
+//                 </div>
+//               )}
+//             </Droppable>
+//           );
+//         })}
+//       </DragDropContext>
+//     </div>
+//   );
+// }
+
+// export default KanbanBoard;
 import React, { useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
- 
+
 
 const initialData = {
   tasks: {
     'task-1': {
       id: 'task-1',
       title: 'Design Homepage',
-      description: 'Create the main homepage layout',
-      deadline: '2025-06-10',
+      description: 'Create layout',
+      deadline: '2025-06-05',
       assignedTo: 'Manish',
       priority: 'High',
-      checklist: 3,
-      completed: 1
-    },
-    'task-2': {
-      id: 'task-2',
-      title: 'Set Up API',
-      description: 'Initialize backend endpoints',
-      deadline: '2025-06-12',
-      assignedTo: 'Anjali',
-      priority: 'Medium',
-      checklist: 5,
-      completed: 2
+      checklist: ['Header', 'Footer', 'Banner'],
+      completed: [true, false, false]
     }
   },
   columns: {
-    'todo': {
-      id: 'todo',
-      title: 'To Do',
-      taskIds: ['task-1', 'task-2']
-    },
-    'inProgress': {
-      id: 'inProgress',
-      title: 'In Progress',
-      taskIds: []
-    },
-    'done': {
-      id: 'done',
-      title: 'Done',
-      taskIds: []
-    }
+    'todo': { id: 'todo', title: 'To Do', taskIds: ['task-1'] },
+    'inProgress': { id: 'inProgress', title: 'In Progress', taskIds: [] },
+    'done': { id: 'done', title: 'Done', taskIds: [] }
   },
   columnOrder: ['todo', 'inProgress', 'done']
 };
 
 function KanbanBoard() {
   const [data, setData] = useState(initialData);
-  const [showForm, setShowForm] = useState(false);
-  const [currentColumn, setCurrentColumn] = useState('');
   const [newTask, setNewTask] = useState({
-    title: '',
-    description: '',
-    deadline: '',
-    assignedTo: '',
-    priority: 'Low',
-    checklist: 1,
-    completed: 0
+    title: '', description: '', deadline: '', assignedTo: '', priority: 'Low', checklist: ''
   });
+  const [showModal, setShowModal] = useState(false);
 
-  const onDragEnd = (result) => {
-    const { destination, source, draggableId } = result;
+  const onDragEnd = ({ destination, source, draggableId }) => {
     if (!destination) return;
-
     const start = data.columns[source.droppableId];
     const finish = data.columns[destination.droppableId];
 
     if (start === finish) {
-      const newTaskIds = Array.from(start.taskIds);
+      const newTaskIds = [...start.taskIds];
       newTaskIds.splice(source.index, 1);
       newTaskIds.splice(destination.index, 0, draggableId);
+      const newColumn = { ...start, taskIds: newTaskIds };
 
-      const newColumn = {
-        ...start,
-        taskIds: newTaskIds
-      };
+      setData({
+        ...data,
+        columns: { ...data.columns, [newColumn.id]: newColumn }
+      });
+    } else {
+      const startTaskIds = [...start.taskIds];
+      startTaskIds.splice(source.index, 1);
+      const finishTaskIds = [...finish.taskIds];
+      finishTaskIds.splice(destination.index, 0, draggableId);
 
       setData({
         ...data,
         columns: {
           ...data.columns,
-          [newColumn.id]: newColumn
+          [start.id]: { ...start, taskIds: startTaskIds },
+          [finish.id]: { ...finish, taskIds: finishTaskIds }
         }
       });
-      return;
     }
+  };
 
-    const startTaskIds = Array.from(start.taskIds);
-    startTaskIds.splice(source.index, 1);
-    const newStart = {
-      ...start,
-      taskIds: startTaskIds
-    };
-
-    const finishTaskIds = Array.from(finish.taskIds);
-    finishTaskIds.splice(destination.index, 0, draggableId);
-    const newFinish = {
-      ...finish,
-      taskIds: finishTaskIds
-    };
+  const handleChecklistChange = (taskId, index) => {
+    const task = data.tasks[taskId];
+    const newCompleted = [...task.completed];
+    newCompleted[index] = !newCompleted[index];
 
     setData({
       ...data,
-      columns: {
-        ...data.columns,
-        [newStart.id]: newStart,
-        [newFinish.id]: newFinish
+      tasks: {
+        ...data.tasks,
+        [taskId]: { ...task, completed: newCompleted }
       }
     });
   };
 
-  const handleAddTask = (columnId) => {
+  const handleAddTask = () => {
+    if (!newTask.title.trim()) return;
     const id = `task-${Date.now()}`;
-    const updatedTasks = {
-      ...data.tasks,
-      [id]: {
-        id,
-        ...newTask
-      }
+    const checklistArray = newTask.checklist.split(',').map(i => i.trim());
+    const newTaskObj = {
+      id,
+      title: newTask.title,
+      description: newTask.description,
+      deadline: newTask.deadline,
+      assignedTo: newTask.assignedTo,
+      priority: newTask.priority,
+      checklist: checklistArray,
+      completed: new Array(checklistArray.length).fill(false)
     };
 
-    const updatedColumn = {
-      ...data.columns[columnId],
-      taskIds: [...data.columns[columnId].taskIds, id]
-    };
-
-    setData({
-      ...data,
-      tasks: updatedTasks,
+    setData(prev => ({
+      ...prev,
+      tasks: { ...prev.tasks, [id]: newTaskObj },
       columns: {
-        ...data.columns,
-        [columnId]: updatedColumn
+        ...prev.columns,
+        todo: { ...prev.columns.todo, taskIds: [...prev.columns.todo.taskIds, id] }
       }
-    });
+    }));
 
-    setNewTask({
-      title: '',
-      description: '',
-      deadline: '',
-      assignedTo: '',
-      priority: 'Low',
-      checklist: 1,
-      completed: 0
-    });
-
-    setShowForm(false);
+    setNewTask({ title: '', description: '', deadline: '', assignedTo: '', priority: 'Low', checklist: '' });
+    setShowModal(false);
   };
 
-  const isOverdue = (deadline) => {
-    return new Date(deadline) < new Date();
-  };
+  const isOverdue = (date) => new Date(date) < new Date();
 
   return (
-    <div className="kanban-container">
-      <h2 className="text-2xl font-bold mb-4">🗂️ Kanban Board</h2>
+    <div className="kanban-board">
+      <button className="add-btn" onClick={() => setShowModal(true)}>➕ Add Task</button>
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="board flex gap-4">
-          {data.columnOrder.map((columnId) => {
-            const column = data.columns[columnId];
-            const tasks = column.taskIds.map((taskId) => data.tasks[taskId]);
-
-            return (
-              <Droppable droppableId={column.id} key={column.id}>
-                {(provided) => (
-                  <div
-                    className="column bg-gray-100 p-4 rounded-md w-80"
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                  >
-                    <div className="flex justify-between items-center mb-2">
-                      <h3 className="font-semibold text-lg">{column.title}</h3>
-                      <button
-                        onClick={() => {
-                          setCurrentColumn(column.id);
-                          setShowForm(true);
-                        }}
-                        className="bg-blue-500 text-white px-2 py-1 rounded text-sm"
-                      >
-                        ➕ Add
-                      </button>
-                    </div>
-
-                    {tasks.map((task, index) => (
-                      <Draggable
-                        draggableId={task.id}
-                        index={index}
-                        key={task.id}
-                      >
-                        {(provided) => (
-                          <div
-                            className={`task bg-white p-3 rounded shadow mb-3 border-l-4 ${task.priority === 'High'
-                              ? 'border-red-500'
-                              : task.priority === 'Medium'
-                                ? 'border-yellow-500'
-                                : 'border-green-500'
-                              }`}
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            <h4 className="font-semibold">{task.title}</h4>
-                            <p className="text-sm text-gray-600">{task.description}</p>
-                            <p className="text-xs">👤 {task.assignedTo}</p>
-                            <p className={`text-xs ${isOverdue(task.deadline) ? 'text-red-600' : ''}`}>
-                              ⏳ {task.deadline}
-                            </p>
-                            <p className="text-xs">🔖 Priority: {task.priority}</p>
-                            <div className="mt-2">
-                              <progress
-                                value={task.completed}
-                                max={task.checklist}
-                                className="w-full"
-                              />
-                              <p className="text-xs text-right">
-                                {Math.round((task.completed / task.checklist) * 100)}%
-                              </p>
-                            </div>
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            );
-          })}
-        </div>
+        {data.columnOrder.map((columnId) => {
+          const column = data.columns[columnId];
+          const tasks = column.taskIds.map(id => data.tasks[id]);
+          return (
+            <Droppable droppableId={column.id} key={column.id}>
+              {(provided) => (
+                <div className="kanban-column" {...provided.droppableProps} ref={provided.innerRef}>
+                  <h2>{column.title}</h2>
+                  {tasks.map((task, index) => (
+                    <Draggable draggableId={task.id} index={index} key={task.id}>
+                      {(provided) => (
+                        <div
+                          className={`kanban-task priority-${task.priority.toLowerCase()} ${isOverdue(task.deadline) ? 'overdue' : ''}`}
+                          ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                          <h3>{task.title}</h3>
+                          <p>{task.description}</p>
+                          <p><strong>Assigned:</strong> {task.assignedTo}</p>
+                          <p><strong>Deadline:</strong> {task.deadline}</p>
+                          <p><strong>Priority:</strong> {task.priority}</p>
+                          <ul>
+                            {task.checklist.map((item, idx) => (
+                              <li key={idx}>
+                                <input
+                                  type="checkbox"
+                                  checked={task.completed[idx]}
+                                  onChange={() => handleChecklistChange(task.id, idx)}
+                                /> {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          );
+        })}
       </DragDropContext>
 
-      {/* Add Task Modal */}
-      {showForm && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-30 flex items-center justify-center">
-          <div className="bg-white p-6 rounded shadow-lg w-96">
-            <h3 className="text-xl font-bold mb-4">Add New Task</h3>
-            <input
-              type="text"
-              placeholder="Title"
-              value={newTask.title}
-              onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
-              className="border p-2 w-full mb-2"
-            />
-            <textarea
-              placeholder="Description"
-              value={newTask.description}
-              onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
-              className="border p-2 w-full mb-2"
-            />
-            <input
-              type="date"
-              value={newTask.deadline}
-              onChange={(e) => setNewTask({ ...newTask, deadline: e.target.value })}
-              className="border p-2 w-full mb-2"
-            />
-            <input
-              type="text"
-              placeholder="Assigned To"
-              value={newTask.assignedTo}
-              onChange={(e) => setNewTask({ ...newTask, assignedTo: e.target.value })}
-              className="border p-2 w-full mb-2"
-            />
-            <select
-              value={newTask.priority}
-              onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}
-              className="border p-2 w-full mb-2"
-            >
-              <option>Low</option>
-              <option>Medium</option>
-              <option>High</option>
+      {showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <h2>Add New Task</h2>
+            <input placeholder="Title" value={newTask.title} onChange={(e) => setNewTask({ ...newTask, title: e.target.value })} />
+            <textarea placeholder="Description" value={newTask.description} onChange={(e) => setNewTask({ ...newTask, description: e.target.value })} />
+            <input type="date" value={newTask.deadline} onChange={(e) => setNewTask({ ...newTask, deadline: e.target.value })} />
+            <input placeholder="Assigned To" value={newTask.assignedTo} onChange={(e) => setNewTask({ ...newTask, assignedTo: e.target.value })} />
+            <select value={newTask.priority} onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}>
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
             </select>
-            <button
-              className="bg-green-600 text-white px-4 py-2 rounded mr-2"
-              onClick={() => handleAddTask(currentColumn)}
-            >
-              ✅ Add
-            </button>
-            <button
-              className="bg-gray-400 text-white px-4 py-2 rounded"
-              onClick={() => setShowForm(false)}
-            >
-              ❌ Cancel
-            </button>
+            <input placeholder="Checklist (comma separated)" value={newTask.checklist} onChange={(e) => setNewTask({ ...newTask, checklist: e.target.value })} />
+            <div>
+              <button onClick={handleAddTask}>Add Task</button>
+              <button onClick={() => setShowModal(false)}>Cancel</button>
+            </div>
           </div>
         </div>
       )}
