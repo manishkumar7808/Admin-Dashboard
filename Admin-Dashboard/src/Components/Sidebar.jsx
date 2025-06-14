@@ -47,6 +47,11 @@ function Sidebar({ openSidebarToggle, OpenSidebar }) {
             <BsPalette className='icon' /> Themes
           </Link>
         </li>
+        <li className='sidebar-list-item'>
+          <Link to='/Setting'>
+            <BsPalette className='icon' /> Setting
+          </Link>
+        </li>
        
       </ul>
     </aside>

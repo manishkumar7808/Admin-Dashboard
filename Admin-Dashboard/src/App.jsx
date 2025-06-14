@@ -10,6 +10,8 @@ import Tables from './Pages/Tables';
 import Charts from './Pages/Charts';
 import Calendar from './Pages/Calendar';
 import Kanban from './Pages/Kanban';
+import Report from './Pages/Report';
+
 
 function App() {
   const [openSidebarToggle, setOpenSidebarToggle] = useState(false);
@@ -70,6 +72,9 @@ function App() {
               <Route path='/charts' element={<Charts />} />
               <Route path='/calendar' element={<Calendar />} />
               <Route path='/kanban' element={<Kanban />} />
+               <Route path='/Report' element={<Report />} />
+             
+               
             </Routes>
           </main>
         </div>
